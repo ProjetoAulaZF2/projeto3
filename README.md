@@ -71,7 +71,7 @@ Se não tiver, adicione juntamente com o seguinte código:
 	{
 	throw new \Exception("Não validado");
 	}
-
+Logo após coloquei o código abaixo:
 	    public function getInputFilter()
 	    {
 		if (!$this->inputFilter) {
