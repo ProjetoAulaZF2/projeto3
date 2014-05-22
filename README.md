@@ -67,10 +67,10 @@ tem as seguintes namespaces:
 	use Zend\InputFilter\InputFilterInterface;
 
 Se não tiver, adicione juntamente com o seguinte código:
-		 public function setInputFilter(InputFilterInterface $inputFilter)
-		    {
-			throw new \Exception("Não validado");
-		    }
+	public function setInputFilter(InputFilterInterface $inputFilter)
+	{
+	throw new \Exception("Não validado");
+	}
 
 	    public function getInputFilter()
 	    {
