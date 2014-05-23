@@ -356,7 +356,7 @@ E por último vamos criar nosso método deleteAction em nossa IndexController.ph
 	    }
 
 Pronto! Finalizamos o nosso primeiro CRUD em ZF2!
-Muito simples né? Na próxima aula vamos ver sobre autenticação e permissão de usuários.
+Muito simples né? No próximo projeto vamos ver sobre autenticação de usuários.
 
 
 
