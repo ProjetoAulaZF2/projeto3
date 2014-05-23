@@ -1,5 +1,4 @@
 <?php
-
 $title = 'Cadastrar um novo celular';
 $this->headTitle($title);
 ?>
@@ -8,10 +7,24 @@ $this->headTitle($title);
 $form = $this->form;
 $form->setAttribute('action', $this->basePath('celular/index/add'));
 $form->prepare();
-
-echo $this->form()->openTag($form);
-echo $this->formHidden($form->get('id'));
-echo $this->formRow($form->get('marca'));
-echo $this->formRow($form->get('modelo'));
-echo $this->formSubmit($form->get('submit'));
-echo $this->form()->closeTag();
+?>
+<?php echo $this->form()->openTag($form); ?>
+<?php echo $this->formHidden($form->get('id'));?>
+    <div class="form-group">
+    	<label for="marca" class="col-sm-2 control-label">Marca</label>
+    	<div class="col-sm-3">
+    		<?php echo $this->formRow($form->get('marca')); ?>
+    	</div>
+    </div>
+    <div class="form-group">
+    	<label for="modelo" class="col-sm-2 control-label">Modelo</label>
+    	<div class="col-sm-3">
+    		<?php echo $this->formRow($form->get('modelo')); ?>
+    	</div>
+    </div>
+    <div class="form-group">
+    	<div class="col-sm-offset-2 col-sm-4">
+    		<?php echo $this->formSubmit($form->get('submit')); ?>
+    	</div>
+    </div>
+<?php echo $this->form()->closeTag();?>

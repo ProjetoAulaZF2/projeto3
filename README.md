@@ -68,10 +68,10 @@ tem as seguintes namespaces:
 
 Se não tiver, adicione juntamente com o seguinte código:
 
-	public function setInputFilter(InputFilterInterface $inputFilter)
-          {
-		throw new \Exception("Não validado");
-	   }
+        public function setInputFilter(InputFilterInterface $inputFilter)
+        {
+          throw new \Exception("Não validado");
+	}
 
 Logo após coloquei o código abaixo:
 
