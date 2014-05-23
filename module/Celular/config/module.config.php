@@ -33,7 +33,15 @@ return array(
             ),
         ),
     ),
-  
+    'service_manager' => array(
+    		'abstract_factories' => array(
+    				'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
+    				'Zend\Log\LoggerAbstractServiceFactory',
+    		),
+    		'aliases' => array(
+    				'translator' => 'MvcTranslator',
+    		),
+    ),
     'controllers' => array(
         'invokables' => array(
             'Celular\Controller\Index' => 'Celular\Controller\IndexController',

@@ -213,12 +213,150 @@ Por último em seu add.phtml vamos colocar o código:
 	echo $this->formSubmit($form->get('submit'));
 	echo $this->form()->closeTag();
 Pronto! Criamos nosso primeiro formulário de cadastro de celulares.
+Agora vamos criar um CRUD.
+
+CRUD completo em Zend Framework 2
+------------------------------------
+
+Como já fizemos o cadastro, o resto fica muito fácil, pois já configuramos o nossos Zend\Form\Form.
+Agora vamos criar a nossa Action de editar nossos registros e como tudo no ZF2 isso é muito simples.
+Vamos criar uma Action exclusivamente para realizar edição no caminho 
+projeto3/module/Celular/celular/view/index/edit.phtml com o seguinte código:
+
+	<?php
+	$title = 'Editar o celular';
+	$this->headTitle($title);
+	?>
+	<h1><?php echo $this->escapeHtml($title); ?></h1>
+	<?php
+	$form = $this->form;
+	$form->setAttribute('action', $this->basePath('celular/index/edit'));
+	$form->prepare();
+	?>
+	<div class="page-header">
+	<?php echo $this->form()->openTag($form); ?>
+	<?php echo $this->formHidden($form->get('id'));?>
+	    <div class="form-group">
+	    	<label for="marca" class="col-sm-2 control-label">Marca</label>
+	    	<div class="col-sm-3">
+	    		<?php echo $this->formRow($form->get('marca')); ?>
+	    	</div>
+	    </div>
+	    <div class="form-group">
+	    	<label for="modelo" class="col-sm-2 control-label">Modelo</label>
+	    	<div class="col-sm-3">
+	    		<?php echo $this->formRow($form->get('modelo')); ?>
+	    	</div>
+	    </div>
+	    <div class="form-group">
+	    	<div class="col-sm-offset-2 col-sm-4">
+	    		<?php echo $this->formSubmit($form->get('submit')); ?>
+	    	</div>
+	    </div>
+	<?php echo $this->form()->closeTag();?>
+	</div>
+
+Já que fizemos o template, agora vamos criar o nosso método de Action em nossa IndexController.php.
+Adicione o seguinte método:
+
+	 public function editAction()
+	    {
+	    	$id = (int) $this->params()->fromRoute('id', 0);
+	    	
+	    	if (empty($id))
+	    	{
+	    		$id = $this->getRequest()->getPost('id');
+	    		if (empty($id)) {
+	    			return $this->redirect()->toUrl('add');
+	    		}
+	    	}
+	    	
+	    	try {
+	    		$celular = $this->getCelularTable()->getCelular($id);
+	    	}
+	    	catch (\Exception $ex) {
+	    		return $this->redirect()->toRoute('celular', array( 
+	    				'action' => 'index'
+	    		));
+	    	}
+	    
+	    	$form  = new CelularForm();
+	    	$form->bind($celular);
+	    
+	    	$request = $this->getRequest();
+	    	if ($request->isPost()) {
+	    		$form->setInputFilter($celular->getInputFilter());
+	    		$form->setData($request->getPost());
+	    
+	    		if ($form->isValid()) {
+	    			$this->getCelularTable()->salvarCelular($form->getData());
+	    
+	    			return $this->redirect()->toRoute('celular');
+	    		}
+	    	}
+	    
+	    	return array(
+	    			'id' => $id,
+	    			'form' => $form,
+	    	);
+	    }
 
 
+Certifique-se que o seu index.phtml que é o arquivo que exibe sua listagem tenha o seguinte código html:
+
+	<a href="<?php echo $this->basePath('celular/index/edit/' . $celular->id) ?>"><span class="glyphicon glyphicon-pencil"></span> Editar</a>
 
 
+Pronto! Agora também podemos editar nosso cadastro de celulares, então vamos para o último passo que é deletar os registros.
+Também temos que criar uma template delete.phtml com o seguinte código:
 
+	<?php
+	$title = 'Excluir Celular';
+	$this->headTitle($title);
+	?>
+	<h1><?php echo $this->escapeHtml($title); ?></h1>
 
+	<p>Você tem certeza que vai deletar esses registros:
+	    '<?php echo $this->escapeHtml($celular->marca); ?>' 
+	    '<?php echo $this->escapeHtml($celular->modelo); ?>'?
+	</p>
+	<form action="<?php echo $this->basepath("celular/index/delete/{$this->id}"); ?>" method="post">
+	<div>
+	    <input type="hidden" name="id" value="<?php echo (int) $celular->id; ?>" />
+	    <input type="submit" name="del" value="Sim" />
+	    <input type="submit" name="del" value="Nao" />
+	</div>
+	</form>
+
+E por último vamos criar nosso método deleteAction em nossa IndexController.php com o seguinte código:
+
+	public function deleteAction()
+	    {
+	    	$id = (int) $this->params()->fromRoute('id', 0);
+	    	if (!$id) {
+	    		return $this->redirect()->toRoute('celular');
+	    	}
+	    
+	    	$request = $this->getRequest();
+	    	if ($request->isPost()) {
+	    		$del = $request->getPost('del', 'Nao');
+	    
+	    		if ($del == 'Sim') {
+	    			$id = (int) $request->getPost('id');
+	    			$this->getCelularTable()->deletarCelular($id);
+	    		}
+	    
+	    		return $this->redirect()->toRoute('celular');
+	    	}
+	    
+	    	return array(
+	    			'id'    => $id,
+	    			'celular' => $this->getCelularTable()->getCelular($id)
+	    	);
+	    }
+
+Pronto! Finalizamos o nosso primeiro CRUD em ZF2!
+Muito simples né? Na próxima aula vamos ver sobre autenticação e permissão de usuários.
 
 
 

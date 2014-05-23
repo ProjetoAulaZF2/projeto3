@@ -45,4 +45,71 @@ class IndexController extends AbstractActionController
     	}
     	return array('form' => $form);
     }
+    
+    public function editAction()
+    {
+    	$id = (int) $this->params()->fromRoute('id', 0);
+    	
+    	if (empty($id))
+    	{
+    		$id = $this->getRequest()->getPost('id');
+    		if (empty($id)) {
+    			return $this->redirect()->toUrl('add');
+    		}
+    	}
+    	
+    	try {
+    		$celular = $this->getCelularTable()->getCelular($id);
+    	}
+    	catch (\Exception $ex) {
+    		return $this->redirect()->toRoute('celular', array( 
+    				'action' => 'index'
+    		));
+    	}
+    
+    	$form  = new CelularForm();
+    	$form->bind($celular);
+    
+    	$request = $this->getRequest();
+    	if ($request->isPost()) {
+    		$form->setInputFilter($celular->getInputFilter());
+    		$form->setData($request->getPost());
+    
+    		if ($form->isValid()) {
+    			$this->getCelularTable()->salvarCelular($form->getData());
+    
+    			return $this->redirect()->toRoute('celular');
+    		}
+    	}
+    
+    	return array(
+    			'id' => $id,
+    			'form' => $form,
+    	);
+    }
+    
+    public function deleteAction()
+    {
+    	$id = (int) $this->params()->fromRoute('id', 0);
+    	if (!$id) {
+    		return $this->redirect()->toRoute('celular');
+    	}
+    
+    	$request = $this->getRequest();
+    	if ($request->isPost()) {
+    		$del = $request->getPost('del', 'Nao');
+    
+    		if ($del == 'Sim') {
+    			$id = (int) $request->getPost('id');
+    			$this->getCelularTable()->deletarCelular($id);
+    		}
+    
+    		return $this->redirect()->toRoute('celular');
+    	}
+    
+    	return array(
+    			'id'    => $id,
+    			'celular' => $this->getCelularTable()->getCelular($id)
+    	);
+    }
 }
