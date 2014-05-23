@@ -73,7 +73,7 @@ Se não tiver, adicione juntamente com o seguinte código:
           throw new \Exception("Não validado");
 	}
 
-Logo após coloquei o código abaixo:
+Logo após coloque o código abaixo:
 
 	    public function getInputFilter()
 	    {
