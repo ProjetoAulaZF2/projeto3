@@ -16,7 +16,7 @@ Criação do formulário para adicionar registros
 
 Primeiro vamos criar a nossa classe de formulário no arquivo projeto3/module/Celular/src/Celular/Form/CelularForm.php 
 com o seguinte código:
-
+~~~php
 	<?php
 	namespace Celular\Form;
 
@@ -56,7 +56,7 @@ com o seguinte código:
 		));
 	    }
 	}
-
+~~~
 
 Confira se no seu arquivo de model que fica no caminho projeto3/module/Celular/src/Celular/Model/Celular.php 
 tem as seguintes namespaces:
@@ -67,14 +67,15 @@ tem as seguintes namespaces:
 	use Zend\InputFilter\InputFilterInterface;
 
 Se não tiver, adicione juntamente com o seguinte código:
-
+~~~php
         public function setInputFilter(InputFilterInterface $inputFilter)
         {
           throw new \Exception("Não validado");
-	}
+	    }
+~~~	    
 
 Logo após coloque o código abaixo:
-
+~~~php
 	    public function getInputFilter()
 	    {
 		if (!$this->inputFilter) {
@@ -132,21 +133,21 @@ Logo após coloque o código abaixo:
 
 		return $this->inputFilter;
 	    }
-
+~~~
 Verifique também se sua classe possui o seguinte atributo:
-
+~~~php
 	protected $inputFilter; 
-
+~~~
 Perfeito, com isso seu formulário já está meio caminho andado, agora vamos para a controller e depois para a view.
 Na controller adicione o seguinte código, lembrando que o caminho da sua controller é
 projeto3/module/Celular/src/Celular/Controller/IndexController.php.
-
+~~~php
 	use Celular\Model\Celular;          // <-- adicione essa linha
 	use Celular\Form\CelularForm;       // <-- adicione essa linha
-
+~~~
 
 E depois no mesmo arquivo, ou seja, na sua classe de controller coloque a sua Action add:
-
+~~~php
 	public function addAction()
 	    {
 	    	$form = new CelularForm();
@@ -167,10 +168,10 @@ E depois no mesmo arquivo, ou seja, na sua classe de controller coloque a sua Ac
 	    	}
 	    	return array('form' => $form);
 	    }
-
+~~~
 Agora vamos criar um método de salvar o celular em nossa classe CelularTable que está no caminho
 projeto3/module/Celular/src/Celular/Model/CelularTable.php vamos criar o método abaixo:
-
+~~~php
 	public function salvarCelular(Celular $celular)
 	    {
 		$data = array(
@@ -192,9 +193,9 @@ projeto3/module/Celular/src/Celular/Model/CelularTable.php vamos criar o método
 		    }
 		}
 	    }
-
+~~~
 Por último em seu add.phtml vamos colocar o código:
-
+~~~php
 	<?php
 
 	$title = 'Cadastrar um novo celular';
@@ -212,6 +213,7 @@ Por último em seu add.phtml vamos colocar o código:
 	echo $this->formRow($form->get('modelo'));
 	echo $this->formSubmit($form->get('submit'));
 	echo $this->form()->closeTag();
+~~~	
 Pronto! Criamos nosso primeiro formulário de cadastro de celulares.
 Agora vamos criar um CRUD.
 
@@ -222,7 +224,7 @@ Como já fizemos o cadastro, o resto fica muito fácil, pois já configuramos o 
 Agora vamos criar a nossa Action de editar nossos registros e como tudo no ZF2 isso é muito simples.
 Vamos criar uma Action exclusivamente para realizar edição no caminho 
 projeto3/module/Celular/celular/view/index/edit.phtml com o seguinte código:
-
+~~~php
 	<?php
 	$title = 'Editar o celular';
 	$this->headTitle($title);
@@ -255,10 +257,10 @@ projeto3/module/Celular/celular/view/index/edit.phtml com o seguinte código:
 	    </div>
 	<?php echo $this->form()->closeTag();?>
 	</div>
-
+~~~
 Já que fizemos o template, agora vamos criar o nosso método de Action em nossa IndexController.php.
 Adicione o seguinte método:
-
+~~~php
 	 public function editAction()
 	    {
 	    	$id = (int) $this->params()->fromRoute('id', 0);
@@ -300,16 +302,16 @@ Adicione o seguinte método:
 	    			'form' => $form,
 	    	);
 	    }
-
+~~~
 
 Certifique-se que o seu index.phtml que é o arquivo que exibe sua listagem tenha o seguinte código html:
-
+~~~html
 	<a href="<?php echo $this->basePath('celular/index/edit/' . $celular->id) ?>"><span class="glyphicon glyphicon-pencil"></span> Editar</a>
-
+~~~
 
 Pronto! Agora também podemos editar nosso cadastro de celulares, então vamos para o último passo que é deletar os registros.
 Também temos que criar uma template delete.phtml com o seguinte código:
-
+~~~html
 	<?php
 	$title = 'Excluir Celular';
 	$this->headTitle($title);
@@ -327,9 +329,9 @@ Também temos que criar uma template delete.phtml com o seguinte código:
 	    <input type="submit" name="del" value="Nao" />
 	</div>
 	</form>
-
+~~~
 E por último vamos criar nosso método deleteAction em nossa IndexController.php com o seguinte código:
-
+~~~php
 	public function deleteAction()
 	    {
 	    	$id = (int) $this->params()->fromRoute('id', 0);
@@ -354,7 +356,7 @@ E por último vamos criar nosso método deleteAction em nossa IndexController.ph
 	    			'celular' => $this->getCelularTable()->getCelular($id)
 	    	);
 	    }
-
+~~~
 Pronto! Finalizamos o nosso primeiro CRUD em ZF2!
 Muito simples né? No próximo projeto vamos ver sobre autenticação de usuários.
 
