@@ -60,12 +60,12 @@ com o seguinte código:
 
 Confira se no seu arquivo de model que fica no caminho projeto3/module/Celular/src/Celular/Model/Celular.php 
 tem as seguintes namespaces:
-
+~~~php
 	use Zend\InputFilter\Factory as InputFactory;
 	use Zend\InputFilter\InputFilter;
 	use Zend\InputFilter\InputFilterAwareInterface;
 	use Zend\InputFilter\InputFilterInterface;
-
+~~~
 Se não tiver, adicione juntamente com o seguinte código:
 ~~~php
         public function setInputFilter(InputFilterInterface $inputFilter)
